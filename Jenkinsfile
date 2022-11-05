@@ -46,7 +46,7 @@ pipeline {
        stage("commit") {
             steps {
                 script {
-                    ConfigGit(String Name, String Mail)
+                    ConfigGit "${params.Name}" "${params.Mail}"
                     PushGit "${env.URL_FOR_GIT}"
                 }
             }
