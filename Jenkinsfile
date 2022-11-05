@@ -11,7 +11,6 @@ pipeline {
     }
     parameters {
         choice(name: "Version", choices:["major", "minor", "patch"], description: "Which version update")
-        string(name: "Name", defaultValue: "", description: "Your name To push to Git")
         string(name: "Mail", defaultValue: "", description: "Your mail To push to Git")
         string(name: "docker_username", defaultValue: "", description: "Write your User to connect to Docker Hub")
         string(name: "repo", defaultValue: "", description: "Write your Repository to Docker Hub")
