@@ -5,7 +5,7 @@ pipeline {
       steps{
         script{
           sh '''
-          echo "'''+GET_URL+''' | awk  -F'/' '{print $2}'"
+          echo "${env.GET_URL} | awk  -F'/' '{print $2}'"
           '''
           
       
