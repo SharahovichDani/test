@@ -6,6 +6,9 @@ pipeline {
     tools {
        nodejs "node"
     }
+    environments {
+        env.URL = pack.sh(script: "echo ${env.GIT_URL} | cut -d'/' -f 3-5", returnStdout: true)   
+    }
     parameters {
         choice(name: "Version", choices:["major", "minor", "patch"], description: "Which version update")
         string(name: "Name", defaultValue: "", description: "Your name To push to Git")
@@ -44,7 +47,7 @@ pipeline {
             steps {
                 script {
                     ConfigGit(String Name, String Mail)
-                    PushGit()
+                    PushGit"${env.URL}"
                 }
             }
       }
