@@ -1,0 +1,12 @@
+pipeline {
+  agent any
+  stages {
+    stage("check"){
+      steps{
+        script{
+          sh "echo env.GIT_URL"
+        }
+      }
+    }
+  }
+}
