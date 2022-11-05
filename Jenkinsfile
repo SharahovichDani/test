@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     ConfigGit(String Name, String Mail)
-                    PushGit"${env.URL}"
+                    PushGit "${env.URL}"
                 }
             }
       }
