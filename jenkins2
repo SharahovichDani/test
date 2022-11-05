@@ -4,7 +4,7 @@ pipeline {
     stage("check"){
       steps{
         script{
-          env.URL = sh(script: "echo \"${env.GIT_URL}\"" | awk  -F'/' '{print $2}', returnStdout: true)
+          env.URL = sh(script: '''echo '''+env.GIT_URL+''' | awk  -F'/' '{print $2}'''', returnStdout: true)
           sh "echo ${env.URL}"
           
       
