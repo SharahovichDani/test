@@ -43,7 +43,7 @@ pipeline {
        stage("commit") {
             steps {
                 script {
-                    ConfigGit(String Name, String Mail)
+                    ConfigGit(String ${params.Name}, String ${params.Mail})
                     PushGit()
                 }
             }
