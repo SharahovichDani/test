@@ -6,7 +6,7 @@ pipeline {
     tools {
        nodejs "node"
     }
-    environments {
+    environment {
         env.URL = pack.sh(script: "echo ${env.GIT_URL} | cut -d'/' -f 3-5", returnStdout: true)   
     }
     parameters {
