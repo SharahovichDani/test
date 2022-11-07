@@ -1,4 +1,4 @@
-library identifier: 'SharedJenkins@main', retriever: modernSCM([$class: 'GitSCMSource', remote: 'https://gitlab.com/SharahovichDani/jenkins_shared_library.git'])
+library identifier: 'SharedJenkins@main', retriever: modernSCM([$class: 'GitSCMSource', remote: 'https://gitlab.com/SharahovichDani/jenkins_shared_library.git', credentialsId: 'GitHub-Credentials'])
 
 
 pipeline {
@@ -10,10 +10,11 @@ pipeline {
         URL_FOR_GIT = sh(script: "echo ${env.GIT_URL} | cut -d'/' -f 3-5", returnStdout: true)   
     }
     parameters {
-        choice(name: "Version", choices:["major", "minor", "patch"], description: "Which version update")
-        string(name: "Mail", defaultValue: "", description: "Your mail To push to Git")
+        choice(name: "version", choices:["major", "minor", "patch"], description: "Which version update")
+        choice(name: "gitChoise", choices:["github", "gitlab"], description: "Which Repository")
+        string(name: "mail", defaultValue: "", description: "Your mail To push to Git")
         string(name: "docker_username", defaultValue: "", description: "Write your User to connect to Docker Hub")
-        string(name: "repo", defaultValue: "", description: "Write your Repository to Docker Hub")
+        string(name: "Repository", defaultValue: "", description: "Write your Repository to Docker Hub")
     }
 
     stages {
@@ -36,20 +37,39 @@ pipeline {
        stage("build") {
             steps {
                 script {
-                    BuildImage "${params.docker_username}/${params.repo}:${env.VERSION2}"
+                    BuildImage "${params.docker_username}/${params.repository}:${env.VERSION2}"
                     LoginDocker()
-                    PushImage "${params.docker_username}/${params.repo}:${env.VERSION2}"
+                    PushImage "${params.docker_username}/${params.repository}:${env.VERSION2}"
                 }
             }
        }
-       stage("commit") {
+       stage("commit to Git-Lab") {
+            when{
+            expression {
+                params.gitChoise == 'gitlab'
+                }
+            }
             steps {
                 script {
-                    ConfigGit "${params.Mail}"
-                    PushGit "${env.URL_FOR_GIT}"
+                    ConfigGit "${params.mail}"
+                    PushGitLab "${env.URL_FOR_GIT}"
+                }
+            }
+        }
+        stage("commit to Git-Hub") {
+            when{
+            expression {
+                params.gitChoise == 'github'
+                }
+            }
+            steps {
+                script {
+                    ConfigGit "${params.mail}"
+                    PushGitHub "${env.URL_FOR_GIT}"
                 }
             }
       }
+
     }
 }
 
